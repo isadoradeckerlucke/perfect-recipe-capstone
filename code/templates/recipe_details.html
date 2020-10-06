@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}{{recipe.title}}{% endblock %}
+{% block content %}
+
+<h2>{{recipe.title}}</h2>
+<!-- add logic - only show if user logged in OR flash "you must be logged in to save recipes" if they're not logged in -->
+<!-- if they've saved this recipe already the button changes to 'unsave' -->
+<!-- logic needs to check: 1) if they're logged in 2) if they've already saved this recipe -->
+<button>save- use toggle states from bootstrap?</button>
+<p>ready in {{recipe.readyInMinutes}} minutes</p>
+
+
+<div class="container-fluid">
+    <div class="row align-items-start">
+        <div class="col-4">
+            <h4>ingredients:</h4>
+                <ul>
+                    {% for ingredient in recipe.extendedIngredients %}
+                    <li>{{ingredient.name}}</li>
+                    {% endfor %}
+                </ul>
+        </div>
+        <div class="col">
+            {% if recipe.image %}
+            <img src="{{recipe.image}}" id = 'recipe_image' class = 'img-fluid' alt="image of {{recipe.title}}">
+            {% else %}
+            <img src="/static/download.jpeg" id = 'recipe_image' class = 'img-fluid' alt="chef hat image">
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+<h3>instructions:</h3>
+<p>{{instructions}}</p>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}find your recipe{% endblock %}
+{% block content %}
+<h2>search for a recipe!</h2>
+<h6>all categories are optional--if you enter nothing, you will be shown random recipes</h6>
+<form id = 'search_form' action = '/search_results' id = 'search-form'>
+
+    <div class = 'form-row'>
+        <div class = 'form-group col-md-4'><label for="need_to_have">must-have ingredients: </label><input class = 'form-control' type="text" placeholder = 'pears, cream, oats' name = 'need_to_have' id = 'need_to_have'></div>
+
+        <div class = 'form-group col-md-4'><label for="can_not_have">can not have ingredients: </label><input class = 'form-control' type="text" placeholder = 'nuts, cheese' name = 'can_not_have' id = 'can_not_have'></div>
+
+        <div class = 'form-group col-md-4'><label for="max_time">max cook time (mins): </label><input class = 'form-control' type="number" placeholder = '45' name = 'max_time' id = 'max_time'></div>
+    </div>
+
+    <div class = 'form-row'>
+        <div class = 'form-group col-md-6'><label for="intolerances">intolerances: </label><input class = 'form-control' type="text" placeholder = 'gluten, dairy, tree nut, egg, shellfish, soy...' name = 'intolerances' id = 'intolerances'></div>
+
+        <div class = 'form-group col-md-6'><label for="diet">diet: </label><input class = 'form-control' type="text" placeholder = 'vegan, pescetarian, gluten free, whole30...' name = 'diet' id = 'diet'></div>
+    </div>
+
+    <div class = 'form-group'><label for="cuisine">cuisine: </label><input class = 'form-control' type="text" placeholder = 'cajun, korean, spanish, african, british, caribbean, chinese, european, french, greek, indian...' name = 'cuisine' id = 'cuisine'></div>
+
+    <div class = 'form-group'><label for="type_food">what are you making? </label><input class = 'form-control' type="text" placeholder = 'main course, beverage, marinade, bread, breakfast, soup, fingerfood, snack, dessert, appetizer...' name = 'type_food' id = 'type_food'></div>
+
+    <button id = 'buttons' class="btn btn-block btn-lg">find a recipe</button>
+</form>
+
+{% endblock %}

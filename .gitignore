@@ -1,0 +1,14 @@
+*.py[cod]
+*$py.class
+__pycache__/
+.DS_Store
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+code/__pycache__
+code/venv

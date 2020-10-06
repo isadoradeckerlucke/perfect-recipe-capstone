@@ -1,0 +1,40 @@
+#recipe_image {
+    max-width: 100%;
+}
+
+#chef_image {
+    max-height: 150px;
+}
+
+#double_check:hover {
+    background-color: teal;
+}
+
+#buttons:hover {
+    background-color: teal;
+}
+
+#buttons {
+    background-color: lightslategray;
+    color: lightpink;
+}
+
+a:link {
+    color: plum;
+  }
+  
+a:visited {
+    color: lightblue;
+}
+  
+a:hover, a:active {
+    color: lightskyblue;
+}
+
+h2 {
+    color:lightpink;
+}
+
+h3, h4, h5, h6, p {
+    color: lightslategray;
+}

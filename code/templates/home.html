@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}perfect recipes{% endblock %}
+{% block content %}
+
+{% if not g.user %}
+<h2>welcome to the perfect recipe generator</h2>
+<h3>let's get cooking-- here are some recipes to get you inspired!</h3>
+<div class="container-fluid">
+    <div class="row border justify-content-around align-items-center">
+        {% for recipe in random_recipes.recipes %}
+        <div class="col-4">
+            <div class="card text-black mb-3">
+                {% if recipe.image %}
+                <img src="{{recipe.image}}" alt="image of {{recipe.title}}" class = 'card-img-top'>
+                {% else %}
+                <img src="/static/download.jpeg" alt="chef hat image" class = 'card-img-top'>
+                {% endif %}
+                <div class="card-body">
+                    <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>  
+                    <p>add a save button</p>              
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% else %} 
+
+<h2>welcome back to the perfect recipe generator, {{g.user.username}}</h2>
+<h3>let's get cooking-- here are some recipes to get you inspired!</h3>
+
+<div class="container-fluid">
+    <div class="row border justify-content-around align-items-center">
+        {% for recipe in random_recipes.recipes %}
+        <div class="col-4">
+            <div class="card text-black mb-3">
+                <img src="{{recipe.image}}" alt="image of {{recipe.title}}" class = 'card-img-top'>
+                <div class="card-body">
+                    <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>  
+                    <p>add a save button</p>              
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
