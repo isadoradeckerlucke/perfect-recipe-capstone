@@ -94,7 +94,7 @@ class UserModelTestCase(TestCase):
 
     def test_invalid_email_signup(self):
         """test that it catches invalid email"""
-        invalid = User.signup("testtest", 'isadoradl5@gmail.com', "password")
+        invalid = User.signup("testtest", None, "password")
         uid = 23423523
         invalid.id = uid
         with self.assertRaises(exc.IntegrityError) as context:

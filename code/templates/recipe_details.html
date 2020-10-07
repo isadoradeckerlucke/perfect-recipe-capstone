@@ -34,4 +34,30 @@
 <h3>instructions:</h3>
 <p>{{instructions}}</p>
 
+<h4>try out some similar recipes:</h4>
+<div class="container-fluid">
+    <div class="row justify-content-around align-items-top">
+
+        {% for recipe in similar_recipes %}
+        <div class="col-4">
+            <div class="card text-black mb-3">
+
+                <!-- {% if recipe.sourceUrl %}
+                <img src="{{recipe.sourceUrl}}" alt="image of {{recipe.title}}" class = 'card-img-top'>
+                {% else %}
+                <img src="/static/download.jpeg" alt="chef hat image" class = 'card-img-top'>
+                {% endif %} -->
+
+                <div class="card-body">
+                    <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>  
+                    <p>{{recipe.servings}} servings ready in {{recipe.readyInMinutes}} minutes</p>
+                    <p>add a save button</p>              
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}
+

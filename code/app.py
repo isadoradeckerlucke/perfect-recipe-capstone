@@ -8,9 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from models import db, connect_db, User
 from forms import LoginForm, AddUserForm
-api_key = 'ff7dd42a47bb43f5bb7c888ea284458e'
-api_key_2 = '28bc28ceb89040348ac7682f29690221'
-
+from secrets import api_key, api_key_2
 # don't forget to run seed.py!!!
 
 CURR_USER_KEY = 'current_user'
@@ -108,12 +106,12 @@ def login():
 
     return render_template('login.html', form = form)
 
-@app.route('/search')
+@app.route('/recipe/search')
 def search_recipes():
     """display search form"""
     return render_template('search.html')
 
-@app.route('/search_results')
+@app.route('/recipe/search/results')
 def display_search_results():
     """display results of user search"""
     need_to_have = request.args['need_to_have']
@@ -151,10 +149,16 @@ def show_recipe_details(recipe_id):
     """show details on a specific recipe"""
     recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={api_key_2}").json()
 
-    instructions = ""
-    soup_instructions = BeautifulSoup(recipe['instructions'], 'html.parser')
-    for string in soup_instructions.stripped_strings:
-        instructions += repr(string)
+    if recipe['instructions']:
+        instructions = ""
+        soup_instructions = BeautifulSoup(recipe['instructions'], 'html.parser')
+        for string in soup_instructions.stripped_strings:
+            stripped_instructions = string.replace('\n', ' ')
 
-    
-    return render_template('recipe_details.html', recipe = recipe, instructions = instructions)
+            instructions += stripped_instructions
+    else:
+        instructions = "we couldn't find instructions for this recipe :("
+
+    similar_recipes = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/similar?apiKey={api_key_2}&number=3").json()
+ 
+    return render_template('recipe_details.html', recipe = recipe, instructions = instructions, similar_recipes = similar_recipes)

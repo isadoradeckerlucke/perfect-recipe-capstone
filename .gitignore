@@ -12,3 +12,4 @@ env.bak/
 venv.bak/
 code/__pycache__
 code/venv
+code/secrets.py

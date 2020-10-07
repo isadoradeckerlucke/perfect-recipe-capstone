@@ -35,6 +35,10 @@ h2 {
     color:lightpink;
 }
 
-h3, h4, h5, h6, p {
+h3, h4, h5, h6 {
+    color: lightpink;
+}
+
+p, li {
     color: lightslategray;
 }
