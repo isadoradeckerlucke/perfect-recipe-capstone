@@ -20,7 +20,7 @@ class UserModelTestCase(TestCase):
     def setUp(self):
         """create test user"""
 
-        User.query.delete()
+        # User.query.delete()
 
         db.drop_all()
         db.create_all()

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}your saved recipes{% endblock %}
+{% block content %}
+
+{% if not saves_list %}
+
+<h2>you haven't saved any recipes yet!</h2>
+<img src="/static/sad_chef.jpg" id = "chef_image" alt="sad chef cartoon">
+<p ><a class = 'btn btn-lg btn-block' id = 'buttons'  href="/recipe/search">search for some new favorites!</a></p>
+
+{% else %}
+
+<h2>{{user.username}}'s saved recipes!</h2>
+<div class="container-fluid">
+    <div class="row border justify-content-around align-items-center">
+        {% for recipe in saves_list %}
+        <div class="col-4">
+            <div class="card text-black mb-3">
+                {% if recipe.image %}
+                <img src="{{recipe.image}}" alt="image of {{recipe.title}}" class = 'card-img-top'>
+                {% else %}
+                <img src="/static/download.jpeg" alt="chef hat image" class = 'card-img-top'>
+                {% endif %}
+                <div class="card-body">
+                    <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>  
+
+                    <form action="/recipe/{{recipe.id}}/save" method = "POST" class = 'save-recipe'>
+                        <button id = 'buttons' class="btn btn-block btn-sm">remove from saved recipes</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+
+{% endblock %}

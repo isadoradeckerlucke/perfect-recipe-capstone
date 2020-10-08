@@ -13,6 +13,18 @@ def connect_db(app):
     db.app = app
     db.init_app(app)
 
+class Saves(db.Model):
+    """connect user saves to recipes"""
+    __tablename__ = 'saves'
+
+    id = db.Column(db.Integer, primary_key = True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+
+    user = db.relationship('User')
+
+    recipe_id = db.Column(db.Integer, nullable = False)
+
 class User(db.Model):
     """User in system"""
     __tablename__ = 'users'
@@ -25,8 +37,7 @@ class User(db.Model):
 
     password = db.Column(db.Text, nullable = False)
 
-    # add below back in when I've made a recipe class
-    # saves = db.relationship('Recipe', secondary = 'saves')
+    saves = db.relationship('Saves', cascade = 'all, delete', passive_deletes = True) 
 
     @classmethod
     def signup(cls, username, email, password):
@@ -50,14 +61,6 @@ class User(db.Model):
                 return user
         return False
 
-class Saves(db.Model):
-    """connect user saves to recipes"""
-    __tablename__ = 'saves'
 
-    id = db.Column(db.Integer, primary_key = True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
 
-    recipe_id = db.Column(db.Integer, nullable = False)
-
-# not sure how to make class Recipes since it should get its id 

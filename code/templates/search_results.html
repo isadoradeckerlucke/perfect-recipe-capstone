@@ -2,21 +2,14 @@
 {% block title %}recipes for you{% endblock %}
 {% block content %}
 
-<!-- edit this into a grid with cards using bootstrap -->
-<!-- <ul>
-    {% for recipe in recipes.results %}
-    <li><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a><img src="{{recipe.image}}" alt="image of {{recipe.title}}"></li>
-    {% endfor %}
-</ul> -->
 {% if recipes.totalResults == 0 %}
 <h2>hm, it looks like your search didn't return any results</h2>
 <img src="/static/sad_chef.jpg" id = "chef_image" alt="sad chef cartoon">
 <p ><a class = 'btn btn-lg btn-block' id = 'buttons'  href="/recipe/search">double check your search terms and try again!</a></p>
 {% else %}
-<h1>here are your recipes!</h1>
+<h2>here are your recipes!</h2>
 <div class="container-fluid">
     <div class="row border justify-content-around align-items-center">
-
         {% for recipe in recipes.results %}
         <div class="col-4">
             <div class="card text-black mb-3">
@@ -26,8 +19,19 @@
                 <img src="/static/download.jpeg" alt="chef hat image" class = 'card-img-top'>
                 {% endif %}
                 <div class="card-body">
-                    <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>  
-                    <p>add a save button</p>              
+                    <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>
+                    
+                    {% if g.user %}
+                    <form action="/recipe/{{recipe.id}}/save" method = "POST" class = 'save-recipe'><button id = 'buttons' class="btn btn-block btn-sm">
+                    {% set bool = saved_var_array[loop.index-1] %}
+                    {% if bool == True %}
+                        remove from saved recipes
+                    {% else %}
+                        save recipe
+                    {% endif %}
+                    </button></form>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

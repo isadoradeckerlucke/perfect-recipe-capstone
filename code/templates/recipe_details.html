@@ -6,7 +6,17 @@
 <!-- add logic - only show if user logged in OR flash "you must be logged in to save recipes" if they're not logged in -->
 <!-- if they've saved this recipe already the button changes to 'unsave' -->
 <!-- logic needs to check: 1) if they're logged in 2) if they've already saved this recipe -->
-<button>save- use toggle states from bootstrap?</button>
+{% if g.user %}
+<form action="/recipe/{{recipe.id}}/save" method = "POST" class = 'save-recipe'>
+    <button id = 'buttons' class="btn btn-block btn-sm">
+        {% if saved_var_main %}
+        remove from saved recipes
+        {% else %}
+        save recipe
+        {% endif %}
+    </button>
+</form>               
+{% endif %}
 <p>ready in {{recipe.readyInMinutes}} minutes</p>
 
 
@@ -37,21 +47,26 @@
 <h4>try out some similar recipes:</h4>
 <div class="container-fluid">
     <div class="row justify-content-around align-items-top">
-
         {% for recipe in similar_recipes %}
         <div class="col-4">
             <div class="card text-black mb-3">
-
-                <!-- {% if recipe.sourceUrl %}
-                <img src="{{recipe.sourceUrl}}" alt="image of {{recipe.title}}" class = 'card-img-top'>
-                {% else %}
-                <img src="/static/download.jpeg" alt="chef hat image" class = 'card-img-top'>
-                {% endif %} -->
-
                 <div class="card-body">
                     <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>  
                     <p>{{recipe.servings}} servings ready in {{recipe.readyInMinutes}} minutes</p>
-                    <p>add a save button</p>              
+
+                    {% if g.user %}
+                    <form action="/recipe/{{recipe.id}}/save" method = "POST" class = 'save-recipe'><button id = 'buttons' class="btn btn-block btn-sm">
+                    {% set bool = saved_var_array_similar[loop.index-1] %}
+                    {% if bool == True %}
+                        remove from saved recipes
+                    {% else %}
+                        save recipe
+                    {% endif %}
+                    
+                    </button></form>
+                    {% endif %}
+
+
                 </div>
             </div>
         </div>

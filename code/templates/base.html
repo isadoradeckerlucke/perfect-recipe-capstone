@@ -15,11 +15,12 @@
 
 </head>
 <body>
-    <!-- create a navbar. if user in session: log out, saved recipes, search. if user not in session: log in, signup, search -->
-
 
     <nav class="navbar justify-content-center navbar-expand-lg">
         <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">home</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/recipe/search">search for new recipes!</a>
             </li>
@@ -36,53 +37,13 @@
             <li class="nav-item">
                 <a class="nav-link" href="/logout">log out</a>
             </li>
-            <li class="dropdown nav-item">
-                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">my saved recipes
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <!-- loop through liked recipes list here! these are just placeholders -->
-                    <li>
-                        <a href="#">saved recipe 1</a>
-                    </li>
-                    <li>
-                        <a href="#">saved recipe 2</a>
-                    </li>
-                    <li>
-                        <a href="#">saved recipe 3</a>
-                    </li>
-                    <li>
-                        <a href="#">saved recipe 4</a>
-                    </li>
-                </ul>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/{{g.user.id}}/saves">view my saved recipes</a>
             </li>
+
             {% endif %}
         </ul>
     </nav>
-    
-
-
-
-
-
-    <!-- <div class="navbar navbar-dark bg-primary">
-        <div class="navbar-brand">find your perfect recipe!</div> -->
-
-        <!-- <div class="navbar-text">
-            <a href="/">search for new recipes!</a> |
-            {% if not g.user %}
-            <a href="/signup">sign up</a> |
-            <a  href="/login">log in</a>
-            {% else %}
-            <div class="dropdown-menu">
-                <a href="/" class="dropdown-item">test item 1</a>
-                <a href="/" class="dropdown-item">test item 2-replace with for loop to loop thru saved recipes list</a>
-            </div> |
-            <a href="/logout">log out</a>
-            {% endif %}
-
-        </div> -->
-    <!-- </div> -->
 
     <div class="container">
         {% for category, message in get_flashed_messages(with_categories=True) %}
