@@ -2,7 +2,6 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 import requests
 import json
-from flask_cors import CORS
 from bs4 import BeautifulSoup
 from sqlalchemy.exc import IntegrityError
 
@@ -13,7 +12,6 @@ from secrets import api_key_1, api_key_2, api_key_3
 
 CURR_USER_KEY = 'current_user'
 app = Flask(__name__)
-CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgres:///perfect-recipe'))
@@ -50,20 +48,20 @@ def do_logout():
 
 def check_if_saved(recipe_id):
     """check if a recipe has been saved by the user. returns True if recipe has already been saved, False if not"""
-    
-    user_saves = g.user.saves
-    # create a list of the saved recipe ids so that i can tell whether to add to saves or remove from saves
-    num_saves = len(user_saves)
-    id_list = []
+    if g.user:
+        user_saves = g.user.saves
+        # create a list of the saved recipe ids so that i can tell whether to add to saves or remove from saves
+        num_saves = len(user_saves)
+        id_list = []
 
-    for i in range(num_saves):
-        saved_recipe_id = g.user.saves[i].recipe_id
-        id_list.append(saved_recipe_id)
+        for i in range(num_saves):
+            saved_recipe_id = g.user.saves[i].recipe_id
+            id_list.append(saved_recipe_id)
 
-    if recipe_id in id_list:
-        return True
-    else:
-        return False
+        if recipe_id in id_list:
+            return True
+        else:
+            return False
 
 
 @app.route('/')
@@ -71,8 +69,7 @@ def home_page():
     """welcome user and show them recipes"""
     # could be random recipes or sorted by food type
 
-    random_recipes = requests.get(f"https://api.spoonacular.com/recipes/random?apiKey={api_key_1}&number=12").json()
-    print(random_recipes)
+    random_recipes = requests.get(f"https://api.spoonacular.com/recipes/random?apiKey={api_key_2}&number=12").json()
 
     saved_var_array = []
     for recipe in random_recipes['recipes']:
@@ -145,7 +142,7 @@ def display_search_results():
     cuisine = request.args['cuisine']
     type_food = request.args['type_food']
 
-    base_url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={api_key_1}&number=21&instructionsRequired=true"
+    base_url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={api_key_2}&number=21&instructionsRequired=true"
 
     if need_to_have: 
         base_url += f"&includeIngredients={need_to_have}"
@@ -165,8 +162,9 @@ def display_search_results():
     recipes = requests.get(base_url).json()
 
     saved_var_array = []
-    for recipe in recipes['results']:
-        saved_var_array.append(check_if_saved(recipe['id']))
+    if recipes['results']:
+        for recipe in recipes['results']:
+            saved_var_array.append(check_if_saved(recipe['id']))
 
 
     return render_template('search_results.html', recipes = recipes, saved_var_array=saved_var_array)
@@ -175,7 +173,7 @@ def display_search_results():
 @app.route('/recipe/<int:recipe_id>')
 def show_recipe_details(recipe_id):
     """show details on a specific recipe"""
-    recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={api_key_1}").json()
+    recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={api_key_2}").json()
 
     if recipe['instructions']:
         instructions = ""
@@ -187,7 +185,7 @@ def show_recipe_details(recipe_id):
     else:
         instructions = "we couldn't find instructions for this recipe :("
 
-    similar_recipes = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/similar?apiKey={api_key_1}&number=3").json()
+    similar_recipes = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/similar?apiKey={api_key_2}&number=3").json()
 
     saved_var_main = check_if_saved(recipe_id)
     saved_var_array_similar = []
@@ -214,7 +212,7 @@ def show_user_saves(user_id):
     num_saves = len(user.saves)
     for i in range(num_saves):
         recipe_id = user.saves[i].recipe_id
-        saved_recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={api_key_1}").json()
+        saved_recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={api_key_2}").json()
         saves_list.append(saved_recipe)
 
     return render_template('saves.html', user = user, saves_list = saves_list)

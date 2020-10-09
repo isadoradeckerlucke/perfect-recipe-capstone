@@ -41,7 +41,6 @@
                 {% endif %}
                 <div class="card-body">
                     <h5><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a></h5>
-
                     <form action="/recipe/{{recipe.id}}/save" method = "POST" class = 'save-recipe'><button id = 'buttons' class="btn btn-block btn-sm">
                         {% set bool = saved_var_array[loop.index-1] %}
                         {% if bool == True %}

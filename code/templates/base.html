@@ -46,6 +46,8 @@
     </nav>
 
     <div class="container">
+    <p id = 'error_display'></p>
+
         {% for category, message in get_flashed_messages(with_categories=True) %}
         <div class="alert alert-{{ category }}">{{ message }}</div>
         {% endfor %}
@@ -54,6 +56,8 @@
         {% endblock %}
       
       </div>
-      
+
+<script src="/static/app.js"></script>
+
 </body>
 </html>
