@@ -4,6 +4,9 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from sqlalchemy.exc import IntegrityError
+from boto.s3.connection import S3Connection
+s3 = S3Connection(os.environ['API_KEY_1'], os.environ['API_KEY_2'])
+
 
 from models import db, connect_db, User, Saves
 from forms import LoginForm, AddUserForm
@@ -16,7 +19,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = (
     os.environ.get('DATABASE_URL', 'postgres:///perfect-recipe'))
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', "it's a secret")
-app.config['API_KEY'] = os.environ.get('API_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -70,7 +72,7 @@ def home_page():
     """welcome user and show them recipes"""
     # could be random recipes or sorted by food type
 
-    random_recipes = requests.get(f"https://api.spoonacular.com/recipes/random?apiKey={API_KEY}&number=12").json()
+    random_recipes = requests.get(f"https://api.spoonacular.com/recipes/random?apiKey={s3}&number=12").json()
 
     saved_var_array = []
     for recipe in random_recipes['recipes']:
@@ -143,7 +145,7 @@ def display_search_results():
     cuisine = request.args['cuisine']
     type_food = request.args['type_food']
 
-    base_url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&number=21&instructionsRequired=true"
+    base_url = f"https://api.spoonacular.com/recipes/complexSearch?apiKey={s3}&number=21&instructionsRequired=true"
 
     if need_to_have: 
         base_url += f"&includeIngredients={need_to_have}"
@@ -174,7 +176,7 @@ def display_search_results():
 @app.route('/recipe/<int:recipe_id>')
 def show_recipe_details(recipe_id):
     """show details on a specific recipe"""
-    recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={API_KEY}").json()
+    recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={s3}").json()
 
     if recipe['instructions']:
         instructions = ""
@@ -186,7 +188,7 @@ def show_recipe_details(recipe_id):
     else:
         instructions = "we couldn't find instructions for this recipe :("
 
-    similar_recipes = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/similar?apiKey={API_KEY}&number=3").json()
+    similar_recipes = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/similar?apiKey={s3}&number=3").json()
 
     saved_var_main = check_if_saved(recipe_id)
     saved_var_array_similar = []
@@ -213,7 +215,7 @@ def show_user_saves(user_id):
     num_saves = len(user.saves)
     for i in range(num_saves):
         recipe_id = user.saves[i].recipe_id
-        saved_recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={API_KEY}").json()
+        saved_recipe = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?apiKey={s3}").json()
         saves_list.append(saved_recipe)
 
     return render_template('saves.html', user = user, saves_list = saves_list)
